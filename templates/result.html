@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Result</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Customer Information</h1>
+        <h2>Customer Details:</h2>
+        <table>
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Customer Number</td>
+                <td>{{ customer.number }}</td>
+            </tr>
+            <tr>
+                <td>Company Name</td>
+                <td>{{ customer.name }}</td>
+            </tr>
+            <tr>
+                <td>Contact Person</td>
+                <td>{{ customer.contact_first }} {{ customer.contact_last }}</td>
+            </tr>
+            <tr>
+                <td>Phone Number</td>
+                <td>{{ customer.phone }}</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>{{ customer.address }}</td>
+            </tr>
+            <tr>
+                <td>City</td>
+                <td>{{ customer.city }}</td>
+            </tr>
+            <tr>
+                <td>Country</td>
+                <td>{{ customer.country }}</td>
+            </tr>
+        </table>
+        <div style="text-align: center;">
+            <a href="/findcustomer" class="button">Search Another</a>
+            <a href="/" class="button" style="background: #6c757d; margin-left: 10px;">Home</a>
+        </div>
+    </div>
+</body>
+</html>
