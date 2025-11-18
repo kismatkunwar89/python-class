@@ -9,27 +9,25 @@
 <body>
     <div class="container">
         <h1>Find Customer</h1>
-        <p>Enter customer number to search</p>
+        <p>Search by customer number or name</p>
         {% if error %}
         <div class="error">{{ error }}</div>
         {% endif %}
         <form method="post" action="/findcustomer">
-            <label for="num1">Customer Number:</label>
-            <input type="text" id="num1" name="num1" required>
+            <label for="search_type">Search By:</label>
+            <select id="search_type" name="search_type" required>
+                <option value="number">Customer Number</option>
+                <option value="name">Customer Name</option>
+            </select>
+
+            <label for="search_value">Search Value:</label>
+            <input type="text" id="search_value" name="search_value" required>
 
             <input type="submit" value="Search">
         </form>
+        <a href="/" class="button">Back to Home</a>
     </div>
 </body>
 
 </html>
-
-
-<body>
-
-<table>
-    <tr></tr>
-    
-</table>
-</body>
 
