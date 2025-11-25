@@ -1,51 +1,73 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Customer Result</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Customer Information</h1>
-        <h2>Customer Details:</h2>
-        <table>
-            <tr>
-                <th>Field</th>
-                <th>Value</th>
-            </tr>
-            <tr>
-                <td>Customer Number</td>
-                <td>{{ customer.number }}</td>
-            </tr>
-            <tr>
-                <td>Company Name</td>
-                <td>{{ customer.name }}</td>
-            </tr>
-            <tr>
-                <td>Contact Person</td>
-                <td>{{ customer.contact_first }} {{ customer.contact_last }}</td>
-            </tr>
-            <tr>
-                <td>Phone Number</td>
-                <td>{{ customer.phone }}</td>
-            </tr>
-            <tr>
-                <td>Address</td>
-                <td>{{ customer.address }}</td>
-            </tr>
-            <tr>
-                <td>City</td>
-                <td>{{ customer.city }}</td>
-            </tr>
-            <tr>
-                <td>Country</td>
-                <td>{{ customer.country }}</td>
-            </tr>
+{% extends "base.html" %}
+
+{% block title %}Customer Details{% endblock %}
+
+{% block content %}
+<div class="ui container" style="margin-top: 30px;">
+    <div class="ui center aligned segment">
+        <h1 class="ui violet header">
+            <i class="user icon"></i>
+            <div class="content">
+                Customer Information
+                <div class="sub header">Detailed customer record</div>
+            </div>
+        </h1>
+    </div>
+
+    <div class="ui raised segment" style="margin-top: 30px;">
+        <div class="ui violet ribbon label">Customer #{{ customer.number }}</div>
+        <h2 class="ui header" style="margin-top: 20px;">
+            <i class="building icon"></i>
+            {{ customer.name }}
+        </h2>
+
+        <table class="ui definition table">
+            <tbody>
+                <tr>
+                    <td class="collapsing"><strong>Customer Number</strong></td>
+                    <td>{{ customer.number }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Company Name</strong></td>
+                    <td>{{ customer.name }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Contact Person</strong></td>
+                    <td><i class="user icon"></i>{{ customer.contact_first }} {{ customer.contact_last }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Phone Number</strong></td>
+                    <td><i class="phone icon"></i>{{ customer.phone }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Address</strong></td>
+                    <td><i class="home icon"></i>{{ customer.address }}</td>
+                </tr>
+                <tr>
+                    <td><strong>City</strong></td>
+                    <td><i class="map marker icon"></i>{{ customer.city }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Country</strong></td>
+                    <td><i class="flag icon"></i>{{ customer.country }}</td>
+                </tr>
+            </tbody>
         </table>
-        <div style="text-align: center;">
-            <a href="/findcustomer" class="button">Search Another</a>
-            <a href="/" class="button" style="background: #6c757d; margin-left: 10px;">Home</a>
+
+        <div class="ui center aligned segment">
+            <a href="{{ url_for('edit_customer', customer_id=customer.number) }}" class="ui large violet button">
+                <i class="edit icon"></i>
+                Edit Customer
+            </a>
+            <a href="{{ url_for('home') }}" class="ui large button">
+                <i class="search icon"></i>
+                Search Another
+            </a>
+            <a href="{{ url_for('list_customers') }}" class="ui large button">
+                <i class="list icon"></i>
+                All Customers
+            </a>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

@@ -1,247 +1,82 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Customer Management System</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-        }
+{% extends "base.html" %}
 
-        .header {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            text-align: center;
-            color: #333;
-            margin-bottom: 40px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        }
+{% block title %}Customer Portal - Home{% endblock %}
 
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            font-weight: 600;
-            color: #667eea;
-        }
-
-        .header p {
-            margin: 15px 0 0 0;
-            font-size: 1.1em;
-            color: #666;
-        }
-
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px 40px 20px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-number {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #667eea;
-            margin: 10px 0;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .actions-section {
-            margin-top: 40px;
-        }
-
-        .section-title {
-            color: white;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .action-cards {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            flex-wrap: wrap;
-        }
-
-        .action-card {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-            flex: 0 0 auto;
-            width: 250px;
-        }
-
-        .action-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .action-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-        }
-
-        .action-card.search .action-icon { color: #667eea; }
-        .action-card.list .action-icon { color: #f093fb; }
-        .action-card.add .action-icon { color: #4facfe; }
-        .action-card.edit .action-icon { color: #43e97b; }
-
-        .action-title {
-            font-size: 1.4em;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .action-description {
-            color: #666;
-            font-size: 0.95em;
-            line-height: 1.5;
-        }
-
-        .quick-search {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .quick-search h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 1.5em;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .search-form {
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 15px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1.1em;
-            transition: border-color 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .search-btn {
-            padding: 15px 35px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .search-btn:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-    </style>
-</head>
-<body>
-    <div class="dashboard-container">
-        <div class="header">
-            <h1>Customer Portal</h1>
-            <p>Manage your customer information efficiently</p>
-        </div>
-
-        <!-- Quick Search Section -->
-        <div class="quick-search">
-            <h3>Quick Customer Search</h3>
-            <form action="{{ url_for('find_customer_form') }}" method="post" class="search-form">
-                <select name="search_type" class="search-input" style="flex: 0 0 180px;">
-                    <option value="number">By Number</option>
-                    <option value="name">By Name</option>
-                </select>
-                <input type="text" name="search_value" class="search-input" placeholder="Enter search value..." required>
-                <button type="submit" class="search-btn">Search</button>
-            </form>
-        </div>
-
-        <!-- Actions Section -->
-        <div class="actions-section">
-            <h2 class="section-title">What would you like to do?</h2>
-            <div class="action-cards">
-                <a href="{{ url_for('find_customer_form') }}" class="action-card search">
-                    <div class="action-icon">🔍</div>
-                    <div class="action-title">Search Customer</div>
-                    <div class="action-description">Find customers by number or name</div>
-                </a>
-
-                <a href="{{ url_for('list_customers') }}" class="action-card list">
-                    <div class="action-icon">📋</div>
-                    <div class="action-title">View All Customers</div>
-                    <div class="action-description">Browse the complete list of all customers in the database</div>
-                </a>
-
-                <a href="#" class="action-card add">
-                    <div class="action-icon">➕</div>
-                    <div class="action-title">Add New Customer</div>
-                    <div class="action-description">Register a new customer in the system</div>
-                </a>
-
-                <a href="#" class="action-card edit">
-                    <div class="action-icon">✏️</div>
-                    <div class="action-title">Manage Customers</div>
-                    <div class="action-description">Edit or delete existing customer records</div>
-                </a>
+{% block content %}
+<div class="ui container" style="margin-top: 30px;">
+    <!-- Page Header -->
+    <div class="ui center aligned segment">
+        <h1 class="ui violet header">
+            <i class="users icon"></i>
+            <div class="content">
+                Customer Portal
+                <div class="sub header">Manage your customer information efficiently</div>
             </div>
+        </h1>
+    </div>
+
+    <!-- Quick Search Section -->
+    <div class="ui raised segment" style="margin-top: 30px;">
+        <h2 class="ui center aligned header">
+            <i class="search icon"></i>
+            Quick Customer Search
+        </h2>
+        {% if error %}
+        <div class="ui negative message">
+            <i class="close icon"></i>
+            <div class="header">Error</div>
+            <p>{{ error }}</p>
+        </div>
+        {% endif %}
+        <form action="{{ url_for('find_customer_form') }}" method="post" class="ui form">
+            <div class="fields">
+                <div class="six wide field">
+                    <label>Search By</label>
+                    <select name="search_type" class="ui dropdown" required>
+                        <option value="number">By Number</option>
+                        <option value="name">By Name</option>
+                    </select>
+                </div>
+                <div class="ten wide field">
+                    <label>Search Value</label>
+                    <div class="ui action input">
+                        <input type="text" name="search_value" placeholder="Enter search value..." required>
+                        <button type="submit" class="ui violet button">
+                            <i class="search icon"></i>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Actions Section -->
+    <div style="margin-top: 40px;">
+        <h2 class="ui center aligned header">What would you like to do?</h2>
+        <div class="ui two stackable cards">
+            <!-- Manage Customers Card -->
+            <a class="ui card" href="{{ url_for('list_customers') }}" style="text-decoration: none;">
+                <div class="content center aligned">
+                    <i class="huge pink database icon"></i>
+                    <div class="header" style="margin-top: 15px;">Manage Customers</div>
+                    <div class="description" style="margin-top: 10px;">
+                        View, edit, and delete customer records
+                    </div>
+                </div>
+            </a>
+
+            <!-- Add New Customer Card -->
+            <a class="ui card" href="{{ url_for('create_customer') }}" style="text-decoration: none;">
+                <div class="content center aligned">
+                    <i class="huge blue plus circle icon"></i>
+                    <div class="header" style="margin-top: 15px;">Add New Customer</div>
+                    <div class="description" style="margin-top: 10px;">
+                        Register a new customer in the system
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
